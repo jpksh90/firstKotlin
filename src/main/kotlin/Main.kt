@@ -1,8 +1,8 @@
 fun main(args: Array<String>) {
     println("Reading from sample.txt")
-    var employeeData = EmployeeData(CSVSource("sample.txt"))
-    employeeData.show()
+    var employeeDao = EmployeeDao(CSVSource<EmployeeDao>("sample.txt"))
+    employeeDao.show()
     println()
-    employeeData = EmployeeData(SQLiteSource("emp.db"))
-    employeeData.show()
+    employeeDao = EmployeeDao(SQLiteSource<EmployeeDao>("emp.db"))
+    employeeDao.show()
 }

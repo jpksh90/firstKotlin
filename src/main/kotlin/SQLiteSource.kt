@@ -2,7 +2,7 @@ import java.nio.file.Paths
 import java.sql.Connection
 import java.sql.DriverManager
 
-class SQLiteSource(dbfile: String) : DataSource {
+class SQLiteSource<T>(dbfile: String) : DataSource<T> {
 
     private var conn : Connection? = null
 
@@ -13,19 +13,29 @@ class SQLiteSource(dbfile: String) : DataSource {
         println("Connected to database: $dbpath")
     }
 
-    private fun loadEmployees(employeeData: EmployeeData) {
+    private fun loadEmployees(employeeDao: EmployeeDao) {
         val statement = conn?.createStatement()
         val result = statement?.executeQuery("select * from employees")
         if (result != null) {
             while (result.next()) {
-                employeeData.addEmployee(result.getString(1), result.getString(2), result.getInt(3))
+                val emp = Employee(result.getString(1), result.getString(2), result.getInt(3))
+                employeeDao.save(emp)
             }
         }
     }
 
-    override fun load(data: Data) {
-        if (data is EmployeeData) {
+    override fun load(data: Dao<T>) {
+        if (data is EmployeeDao) {
             loadEmployees(data)
         }
+    }
+
+    private fun updateEmployee(employeeDao: EmployeeDao) {
+        val statement = conn?.createStatement()
+        println("not implemented")
+    }
+
+    override fun update(data: Dao<T>) {
+        TODO("Not yet implemented")
     }
 }

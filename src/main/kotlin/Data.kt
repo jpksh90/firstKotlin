@@ -1,3 +1,0 @@
-interface Data {
-    fun show()
-}
